@@ -28,7 +28,7 @@ public class problem2 {
 
     public static void main(String[] args) {
         int[][] computers = { {1,1,0}, {1,1,1}, {0,1,1}};
-        System.out.println(solution(3,computers));
+        //System.out.println(solution(3,computers));
 
     }
 }
