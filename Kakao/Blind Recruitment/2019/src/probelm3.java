@@ -48,7 +48,7 @@ public class probelm3 {
         set.add(s);
         return set;
     }
-    public int solution(String[][] relation) {
+    public static int solution(String[][] relation) {
         String key = "";
         for(int i = 0; i<relation[0].length; i++)
             key += Integer.toString(i);
