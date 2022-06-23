@@ -11,7 +11,7 @@ class Grass{
     int M;
     int D;
     HashMap<Integer, Integer> grass = new HashMap<>();
-    LinkedList<Integer> grass_len= new LinkedList<>();//잔디 길이를 오름차순으로 정렬해
+    LinkedList<Integer> grass_len= new LinkedList<>();//잔디 길이를 오름차순으로 정렬해\
     LinkedList<Integer> Oil = new LinkedList<>();
 
     void Grass_clear(){
@@ -87,7 +87,9 @@ public class SDS1 {
             grass.D = sc.nextInt();
             long ans = 0;
 
-            for(int row = 0; row<grass.N; row++){
+
+
+            /*for(int row = 0; row<grass.N; row++){
                 for(int col = 0; col<grass.M; col++){
                     int block_grass = sc.nextInt();//각 구역의 잔디 길이를 입력받음
 
@@ -99,7 +101,7 @@ public class SDS1 {
                     else
                         grass.grass.put(block_grass, grass.grass.get(block_grass)+1);
                 }
-            }
+            }*/
 
             //기름 입력
             for(int day = 0; day < grass.D; day++)
