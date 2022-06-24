@@ -8,102 +8,105 @@
  */
 import javax.sound.sampled.Line;
 import java.awt.geom.NoninvertibleTransformException;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.*;
 public class SDS4 {
-    public static void Scan_Input(Scanner sc, int Test_num){
+    public static void Scan_Input(BufferedReader br, int Test_num) throws IOException {
         for(int test = 0; test<Test_num; test++){
+
             //입력단계
-            int stop_num = sc.nextInt();
-            int s_line = sc.nextInt();
-            int start = sc.nextInt();
-            int end = sc.nextInt();
-            int[] line_len = new int[s_line];
-            for(int line = 0; line<s_line; line++)
-                line_len[line] = sc.nextInt();
+            String input_line = br.readLine();
+            String[] line_split = input_line.split(" ");
+            int stop_num = Integer.parseInt(line_split[0]);
+            int line_num = Integer.parseInt(line_split[1]);
+            int start_stop = Integer.parseInt(line_split[2]);
+            int end_stop = Integer.parseInt(line_split[3]);
+            int[] line_len = new int[line_num];
 
-            //LinkedList<LinkedList> subway_set = new LinkedList<>();
-            //LinkedList<Integer>[] subway_set = new LinkedList[s_line];
-            for(int line = 0; line<s_line; line++){
-                //subway_set[line] = new LinkedList<Integer>();
-                //subway_set.add(line,new LinkedList<Integer>());
+            input_line = br.readLine();
+            line_split = input_line.split(" ");
+            for(int line = 0; line<line_num; line++)
+                line_len[line] = Integer.parseInt(line_split[line]);
+
+            int[][] subway = new int[line_num][];
+            for(int line = 0; line<line_num; line++){
+                subway[line] = new int[line_len[line]];
+                input_line = br.readLine();
+                line_split = input_line.split(" ");
                 for(int stop = 0; stop<line_len[line]; stop++)
-                    //subway_set.get(line).add(stop,sc.nextInt());
-                    //subway_set[line].add(sc.nextInt());
-            }
+                    subway[line][stop] = Integer.parseInt(line_split[stop]);
+            }//입력 완료
 
-            //문제풀이단계
-
-
-            //각 정류장이 어느어느 호선에 속해있는지 저장
-
-            //Collection 배열을 만들어 풀어보았지만, 구현이 잘 안됨
-            /*{LinkedList<LinkedList> contained_line = new LinkedList<>();
-            contained_line.add(0, null);
+            //데이터 전처리
+            int[][] contained_line = new int[stop_num+1][];
             for(int stop = 1; stop<=stop_num; stop++)
-                contained_line.add(stop, new LinkedList<Integer>());
-
-            //각 호선을 돌면서 호선 안의 정류장들이 해당 호선에 포함되어 있음을 저장(호선 : 0호선부터)
-            for(int line = 0; line<s_line; line++){
-                LinkedList<Integer> now_line = subway_set.get(line);
-                for(int stop = 0; stop<now_line.size(); stop++){
-                    int now_stop = now_line.get(stop);
-                    contained_line.get(now_stop).add(line);
+                contained_line[stop] = new int[line_num];//해당 정거장이 몇호선에 위치했는지 저장
+            for(int line = 0; line<line_num; line++)
+            {
+                for(int stop : subway[line]){
+                    contained_line[stop][line] = 1;//포함된 호선은 1로 저장
                 }
             }
+            HashSet<Integer> visited_line = new HashSet<Integer>();//방문한 호선 저장
+
+            //문제풀이
+            int find = 0;
+            Queue<Integer> next_line = new LinkedList<Integer>();//다음번에 방문 할 호선 큐
+            for(int start_line = 0; start_line<line_num; start_line++)
+            {
+                if(contained_line[start_stop][start_line] == 1) {
+                    for(int stop : subway[start_line]) {
+                        if (stop == end_stop) {
+                            find = 1;//시작한 정거장의 노선에 도착 정거장이 있는경우}
+                            start_line = line_num;
+                            break;
+                        }
+                    }
+                    next_line.add(start_line);
+                    visited_line.add(start_line);
+                }
+            }//시작 정거장이 위치한 호선 추가
 
             int time = 0;
-            //int[]Change_time = new int[s_line];
-            Queue<Integer> ChangeStop = new LinkedList<>();
-            HashSet<Integer> visited = new HashSet<>();
-
-            for(int line = 0; line<s_line; line++){
-                if(subway_set.get(line).contains(start)) {
-                    //Change_time[line] = 0;//해당 라인은 환승 없이 갈 수 있는 구역
-                    visited.add(line);//확인 한 호선은 다시 확인 안함
-                    ChangeStop.add(line);//다음번 환승 가능 호선 계산
-                }
-            }
-            int find = 0;
             while(find == 0){
-
-                time++;
-                //이번 환승동안 갈 수 있는 호선 순회
-                int time_len = ChangeStop.size();
-                for(int i = 0; i<time_len; i++){
-                    //now_line 은 이번 환승때 방문하는 호선들 하나씩 불러옴
-                    int now_line = ChangeStop.poll();
-                    //이번 호선에 목적지가 포함되어 있으면 종료
-                    if(subway_set.get(now_line).contains(end)){
-                        find = 1;
-                        break;
-                    }
-                    else{
-                        visited.add(now_line);
-                        //호선 내의 정류장 순회하면서 다음 환승 라인 추가
-                        LinkedList<Integer> loop_line = subway_set.get(now_line);
-                        for(int stop = 1; stop<=loop_line.size(); stop++){
-                            LinkedList<Integer> temp = contained_line.get(stop);
-                            for(int loop = 0; loop<temp.size();loop++){
-                                int containline = temp.get(loop);
-                                if(!visited.contains(containline)){
-                                    visited.add(containline);
-                                    ChangeStop.add(containline);
+                int thistime_loop = next_line.size();
+                for (int loop = 0; loop < thistime_loop; loop++) {
+                    int thistime_line = next_line.poll();
+                    for (int stop : subway[thistime_line]) {
+                        if(end_stop == stop)
+                        {
+                            find = 1;
+                            loop = thistime_loop;
+                            break;
+                        }
+                        else{
+                            for(int line = 0; line<line_num; line++){
+                                if(contained_line[stop][line] == 1 &&!visited_line.contains(line)){
+                                    visited_line.add(line);
+                                    next_line.add(line);
                                 }
                             }
                         }
                     }
-                }
+                }//각 환승횟수의 case 종료
+
+                if(find == 0)
+                    time++;
             }
-            System.out.printf("#%d %d", test+1, time-1);
-        }*/
-        }
+
+            System.out.printf("#%d %d\n", test+1, time);
+
+
+        }//여기까지가 한 테스트케이스
     }
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        String line = sc.nextLine();
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String line = br.readLine();
         if(line.contains("txt"))
             ;
         else
-            Scan_Input(sc, Integer.parseInt(line));
+            Scan_Input(br, Integer.parseInt(line));
     }
 }
