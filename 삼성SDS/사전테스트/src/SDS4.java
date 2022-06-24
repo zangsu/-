@@ -6,8 +6,6 @@
 2.DP -> 환승 횟수를 하나씩 늘려가면서 해당 라인에 end가 있으면 break
 따지고 보니까 DP는 아니었는지도,,,
  */
-import javax.sound.sampled.Line;
-import java.awt.geom.NoninvertibleTransformException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -70,7 +68,7 @@ public class SDS4 {
             }//시작 정거장이 위치한 호선 추가
 
             int time = 0;
-            while(find == 0){
+            while(find == 0 && !next_line.isEmpty()){
                 int thistime_loop = next_line.size();
                 for (int loop = 0; loop < thistime_loop; loop++) {
                     int thistime_line = next_line.poll();
@@ -96,7 +94,10 @@ public class SDS4 {
                     time++;
             }
 
-            System.out.printf("#%d %d\n", test+1, time);
+            if(find == 1)
+                System.out.printf("#%d %d\n", test+1, time);
+            else
+                System.out.printf("#%d -1\n", test+1);
 
 
         }//여기까지가 한 테스트케이스

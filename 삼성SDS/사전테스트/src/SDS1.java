@@ -23,59 +23,6 @@ class Grass{
 }
 public class SDS1 {
 
-    public static int BufFileRead(BufferedReader bf){
-        int ans = 0;
-        while (true) {
-            try {
-                int c = bf.read();
-                if( (char)c ==  ' ')
-                    break;
-                else
-                    ans = ans*10 + c;
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return ans;
-    }
-    /*public static long SDS1_File(Scanner sc, String File_name){
-        System.out.println("File output");
-
-        File file = new File(File_name);
-        try{
-            FileReader fRead = new FileReader(file);
-            BufferedReader bufReader = new BufferedReader(fRead);
-
-            int Test_Num = BufFileRead(bufReader);
-            System.out.println(Test_Num);
-            /*for(int i = 0; i< Test_Num; i++){
-                int N = Integer.parseInt(bufReader.readLine());
-                int M = Integer.parseInt(bufReader.readLine());
-                int D = Integer.parseInt(bufReader.readLine());
-
-                int[][] garden = new int[N][];
-                for(int row = 0; row<N; row++){
-                    garden[row] = new int[M];
-                    for(int col = 0; col<M; col++){
-                        garden[row][col] = sc.nextInt();
-
-                        if(this.grass_len.contains(garden[row][col]) == false) {
-                            this.grass_len.add(garden[row][col]);
-                            this.grass.put(garden[row][col], 0);
-                        }
-                        else
-                            this.grass.put(garden[row][col], this.grass.get(garden[row][col])+1);
-                    }
-                }
-            }
-        }
-        catch (IOException e){
-            e.printStackTrace();
-        }
-
-        return 0;
-    }*/
     public static void SDS1_Input(Scanner sc, String T, Grass grass){
         int Test_Num = Integer.parseInt(T);
 
@@ -142,11 +89,7 @@ public class SDS1 {
 
         Grass grass = new Grass();
         String line = sc.nextLine();
-        if(line.contains("txt"))
-            ;
-            //SDS1_File(sc, line);
-        else {
             SDS1_Input(sc, line, grass);
-        }
+
     }
 }
