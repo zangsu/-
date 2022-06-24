@@ -110,4 +110,5 @@ public class SDS4 {
         else
             Scan_Input(br, Integer.parseInt(line));
     }
+
 }
