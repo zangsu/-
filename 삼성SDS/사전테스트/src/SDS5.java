@@ -39,22 +39,46 @@ public class SDS5 {
                 for(int col = 0; col<col_max; col++){
                     if(row == 0 || row == row_max-1)
                     {
-                        if (col == 0 || col == col_max - 1)
-                            map_prev[row][col] = new Block(0, 0, "Corner");
-                        else
-                            map_prev[row][col] = new Block(0, 0, "Side");
+                        if (col == 0 || col == col_max - 1) {
+                            map_prev[row][col] = new Block(-1, -1, "Corner");
+                            map_next[row][col] = new Block(-1, -1, "Corner");
+                        }
+                        else {
+                            map_prev[row][col] = new Block(-1, -1, "Side");
+                            map_next[row][col] = new Block(-1, -1, "Side");
+                        }
                     }
-                    else
-                        map_prev[row][col] = new Block(0, 0);
+                    else {
+
+                        map_prev[row][col] = new Block(-1, -1);
+                        map_next[row][col] = new Block(-1, -1);
+                    }
                 }
             }
 
             //문제 풀이
+            //시작 변경전 map은 map_prev-> 번갈아가면서 사용
 
+            long ans = 0;
+            map_prev[start_row][start_col].len = 0;
+            map_prev[start_row][start_col].path_num = 0;
+
+            for (int move = 0; move < move_max; move++) {
+                if(move%2 == 0){//짝수일때는 prev를 보면서 next를 업데이트
+                    ;
+                }
+                else{//홀수일 대는 next를 보면서 prev를 업데이트
+                    ;
+                }
+            }
 
         }//여기까지가 한 테스트케이스
 
     }
+    long getLength(Block[][] map){
+        return 0;
+    }
+
 }
 class Block{
     int len;
@@ -69,6 +93,9 @@ class Block{
         this.len = x;
         this.path_num = y;
         this.loc = loc;
+    }
+    Block(String wall){
+        this.loc = wall;
     }
 
 
